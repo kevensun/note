@@ -66,7 +66,21 @@ Makefile里主要包含了五个东西：显式规则、隐晦规则(自动推�
 ####字符串处理函数  
 字符串替换： 
 
-		$(subst <from>,<to>,<text>)  
+		$(subst <from>,<to>,<text>) 
+		$(patsubst <pattern>,<replacement>,<test>)  
+
+去掉string开头和结尾的空字符：  
+
+		$(strip <string>)  
+
+		$(foreach <var>,<list>,<text>):  
+
+把参数list中的单词逐一取出放到参数var所指定的变量中，然后再执行text所包含的表达式。每一次text会返回一个字符串，循环过程中，text的所返回的每个字符串会以空格分隔，最后当整个循环结束时，text所返回的每个字符串所组成的整个字符串(以字符分隔)将会是foreach函数的返回值  
+
+### 常用隐含规则  
+1. 编译C程序的隐含规则：n.o的目标的依赖目标会自动推导为n.c，并且生成命令是 $(CC) -c $(CPPFLAGS) $(CFLAGS)
+2. 编译C++程序的隐含规则：n.o的目标的依赖目标会自动推导为n.cc或是n.C,并且其生成命令是$(CXX) -c $(CPPFLAGS) $(CFLAGS)
+    
   
 
 
