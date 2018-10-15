@@ -28,6 +28,45 @@ buildroot是一个包含Makefile和修补程序(patch)的集合，这个集合�
 1. 用imagebuilder编译，用于灵活选择package。  
 2. 用SDK编译，用于编译package仓库中没有的软件包  
 3. 从源码编译，因为要重新编译cross-compile toolchains，下载内核和软件包的源码编译，导致这个过程比较耗时，用于上述两种情况搞不定的情况  
-   
+
+***  
+####flash布局  
+
+	   BootLoader | 固件 | jffs2(overlay分区)  
+
+
+jffs2:可写分区  
+squashfs:压缩只读文件系统  
+***  
+squashfs      /rom目录  
+jffs2         /overlay目录  
+overlayfs     让/overlay目录成为根目录  
+***  
+###openwrt路由器的性能、  
+####硬件  
+CPU 800M->1G  MIPS->ARM  单核->双核  
+RAM/flash 速度ddr2->ddr3  容量64M->128M  
+####软件  
+ OS不能动  
+APP：去掉不用的组件  
+*** 
+### WiFi信号优化  
+####软件  
+
+1. 校准  
+2. 提高无线功率  
+
+####硬件  
+1. 天线  
+2. 功放  
+3. PCB走线 
+4. 匹配  
+
+***  
+
+
+
+
+
 
 
