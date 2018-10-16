@@ -22,10 +22,14 @@
  
 ***   
 ###WAN口配置  
-/etc/config/network为网络配置，修改config interface 'lan'中的option ipaddr ，不要跟上级网络一个网段
+/etc/config/network为网络配置，修改config interface 'lan'中的option ipaddr ，不要跟上级网络一个网段  base-files/files/etc/config/network
 ###WIFI配置   
 1. 在make menuconfig时取消原网卡驱动：kernel modules->wireless drivers->kmod-rt2800-soc取消勾选  
 2. 选择新驱动：勾选ralink->ralink-wifi,重新编译  
 ###修改WiFi名与密码  
 - 修改配置文件方式：/etc/config/wireless  
 - 修改源码：openwrt-hiwooya-stable/package/hiwooya-wifi/ralink-wifi/files/lib/wifi/ralink.sh中从后往前看
+
+###配置luci  
+- 无涯定制：make menuconfig:utilities->luciapk  
+- 原生：luci->1.collections->luci;2.luci->modules->translations->chinese
