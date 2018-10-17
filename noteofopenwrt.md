@@ -33,3 +33,45 @@
 ###配置luci  
 - 无涯定制：make menuconfig:utilities->luciapk  
 - 原生：luci->1.collections->luci;2.luci->modules->translations->chinese
+
+###定制固件  
+实际开发过程中，我们总是会按照产品需求做固件定制，但我们又尽量不想修改源码的一些配置，这时我们有一种方法可以满足我们的需求。linux的所有文件都是存放于根目录‘/’下面，如果需要修改某个目录下面的某个文件我们只要将对应的文件覆盖即可，这时可以在源码目录下创建‘files’目录，这个目录可以看成是根目录的映射，只要将要打包到固件的文件按照根目录的目录结构存放文件即可，例如：  
+1. 修改network配置文件  源码openwrt-hiwooya-stable/files/etc/config/network->固件/etc/config/network   
+2. 添加可执行文件 openwrt-hiwooya-stable/files/usr/sbin/setwifi->固件/usr/sbin/setwifi  
+***  
+查看系统MTD分配   cat /proc/mtd  
+查看系统MTD分区   cat /proc/partitions  
+将非文件系统分区读出来  hexdump -C /dev/mtd2  
+***  
+系统分区  
+- u-boot  
+- u-boot-env  
+- factory  
+- firmware  
+- rootfs  
+- rootfs_data  
+
+***  
+####文件系统  
+1. 首先，引导程序启动内核完成以后，由内核加载rootfs_rom只读分区部分来完成系统的初步启动；  
+2. rootfs_rom只读分区采用的是linux内核支持的squashFS文件系统(一种压缩只读文件系统),加载完毕后将其挂载到/rom目录(同时也挂载为/根目录)；  
+3. 系统将使用JFFS2文件系统格式化的rootfs_data可写文件分区并且将这部分挂载到/overlay目录；  
+4. 系统再将/overlay透明挂载为/根目录   
+5. 最后将一部分内存挂载为/tmp目录  
+
+***   
+###无线中继  
+aps命令扫描周围可用WiFi        
+>iwpriv ra0 set SiteSurvey=1  
+>iwpriv ra0 get_site_survey  
+>setwifi   账号  密码   
+***  
+###防火墙   
+- default类型匿名节点：只有一个配置节点，默认配置  
+- zone类型匿名节点：系统将LAN和WAN分为两个不同的zone，两个zone之间是隔离的  
+- forwarding 类型匿名节点：用于不同zone之间的转发  
+- rule类型匿名节点：用来进行配置哪些端口允许访问  
+- direction类型匿名节点：用来配置实现具体端口转发功能  
+
+ 
+
