@@ -72,6 +72,39 @@ aps命令扫描周围可用WiFi
 - forwarding 类型匿名节点：用于不同zone之间的转发  
 - rule类型匿名节点：用来进行配置哪些端口允许访问  
 - direction类型匿名节点：用来配置实现具体端口转发功能  
+***  
+###UPnP  
+安装UPnP  
+>opkg update    
+>opkg install miniupnpd  
+ 
+设置开机自启动   
+>/etc/init.d/miniupnpd enable   
+
+查看miniupnpd是否驻留内存  
+>netstat -lnp | grep miniupnpd  
+
+***   
+###时区  
+为准确对时，需要采用NTP协议向网络上的时间授权服务器请求获得时间服务，再根据本地时区的配置转换为本地时间   
+配置文件 /etc/config/system  
+***   
+###服务管理   
+查看服务   
+>ls /etc/init.d    
+
+服务的语言格式：  
+>/etc/init.d服务名称  [命令]   
+
+可用命令   
+- start  临时开启这个服务  
+- stop   临时关闭这个服务  
+- restart 重启当前已开启服务，如果没开启就开启它  
+- reload  重新读取该服务的配置信息  
+- enable  设置该服务随系统一同启动    
+- disable 禁止该服务随系统一同启动    
+
+
 
  
 
