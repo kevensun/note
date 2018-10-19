@@ -5,7 +5,8 @@
 1. git clone https://github.com/hi-wooya/openwrt-hiwooya-stable.git   
 2. 进入openwrt源码目录，执行./scripts/feeds update –a  
 3. ./scripts/feeds install –a   
-4. 执行make menuconfig ，其中target system选Ralink RT288x/RT3xxx; subtarget选MT7620 base boards;target profile选HiWooya7620  
+4. 执行make menuconfig ，其中          
+target system选Ralink RT288x/RT3xxx; subtarget选MT7620 base boards;target profile选HiWooya7620  
 5. 执行make V=99进行编译(首次编译时间较长，请耐心等待)  
 6. 若编译成功，则bin/ramips/目录下的openwrt-ramips-mt7620-HiWooya7620-squashfs-sysupgrade.bin即是编译好的固件    
 *** 
@@ -103,6 +104,40 @@ aps命令扫描周围可用WiFi
 - reload  重新读取该服务的配置信息  
 - enable  设置该服务随系统一同启动    
 - disable 禁止该服务随系统一同启动    
+
+***    
+###SSH   
+SSH服务在openwrt下是通过一个名字叫dropbear的软件包实现的    
+防火墙限制SSH服务，所以SSH服务只面向LAN口，向WAN口开放需要新建防火墙rule   
+>config rule    
+>option name 'allow ssh'    
+>option src 'wan'   
+>option target 'ACCEPT'   
+>option dest_port '22'     
+
+
+系统默认的root用户没有密码，这个时候SSH是登录不上的，先使用passwd命令给root设置一个密码     
+***   
+    
+
+###SCP   
+向开发板传文件用winscp客户端，选择SCP文件协议   
+***  
+###4G模块    
+拨号  fournet &    
+配置make menuconfig    
+kmod-usb-serial   
+kmod-usb-serial-option   
+kmod-usb-serial-wwan   
+usb-modeswith    
+kmode-usb-net     
+***   
+###配置网口灯    
+1. drv_regopt放在package/kernel下面  
+2. reg放到package下面   
+3. make menuconfig     Utilities  ---><*> reg   
+4. 编译重新烧录固件   
+5. reg w 0x10000060 0
 
 
 
