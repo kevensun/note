@@ -6,7 +6,7 @@
 2. 进入openwrt源码目录，执行./scripts/feeds update –a  
 3. ./scripts/feeds install –a   
 4. 执行make menuconfig ，其中          
-target system选Ralink RT288x/RT3xxx; subtarget选MT7620 base boards;target profile选HiWooya7620  
+target system选Ralink RT288x/RT3xxx; subtarget选MT7620 base boards;target profile选HiWooya7620  network->ssh->openssh-stfp-server  
 5. 执行make V=99进行编译(首次编译时间较长，请耐心等待)  
 6. 若编译成功，则bin/ramips/目录下的openwrt-ramips-mt7620-HiWooya7620-squashfs-sysupgrade.bin即是编译好的固件    
 *** 
@@ -140,7 +140,27 @@ kmode-usb-net
 5. reg w 0x10000060 0
 
 ***  
-###VPN  
+###华为4G模块    
+Vendor Id: 12d1   
+Product Id: 15c1
+picocom  /dev/ttyUSB0  
+拨号上网  在/etc/config/network中配置dns
+- echo "AT^NDISDUP=1,1" > /dev/ttyUSB2  
+- udhcpc -i usb0    
+
+***    
+###内核补丁    
+openwrt源码中的Linux补丁文件放在target/linux/generic文件下面，有对于不同版本的Linux内核补丁文件  
+###openwrt启动流程：  
+/etc/preinit->/lib/preinit/*->/etc/inittab->/etc/rc.d/S*   
+
+***   
+以太网是一种广播传输技术，网络上的所有节点均能检测到网络介质上传输的帧，但一般只有自身Mac地址和帧目的Mac地址相同才会将内容复制到自己的缓冲区，交给ip层进一步检查ip信息。当网卡工作在混杂模式下时，会将所有侦听到的内容交给上层软件处理，例如tcpdump抓包软件。   
+***    
+ARP协议通过向局域网中的所有主机发送广播来查询目标ip的Mac地址    
+***   
+路由就是把报文从源主机传输到目标主机的过程，报文根据路由表来进行路由    
+
 
 
 
