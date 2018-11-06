@@ -137,7 +137,7 @@ kmode-usb-net
 2. reg放到package下面   
 3. make menuconfig     Utilities  ---><*> reg   
 4. 编译重新烧录固件   
-5. reg w 0x10000060 0
+5. reg w 10000060 5a371d
 
 ***  
 ###华为4G模块    
