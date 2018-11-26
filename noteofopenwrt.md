@@ -159,8 +159,51 @@ openwrt源码中的Linux补丁文件放在target/linux/generic文件下面，有
 ***    
 ARP协议通过向局域网中的所有主机发送广播来查询目标ip的Mac地址    
 ***   
-路由就是把报文从源主机传输到目标主机的过程，报文根据路由表来进行路由    
+路由就是把报文从源主机传输到目标主机的过程，报文根据路由表来进行路由        
+***   
+###给openwrt的固件打上自己的印记   
+1. 修改/etc/config/banner   /etc/config/system  
+  
+###用户空间访问gpio   
+/sys/class/gpio/export   
+###设置openwrt应用程序开机和崩溃时自动启动   
+在/etc/init.d中添加helloworld启动脚本，内容如下：   
 
+
+    #!/bin/sh  /etc/rc.common   
+	START=90  
+	USE_PROCD=1  
+	PROG=/helloworld/helloworld  
+	start_sevrice(){
+	procd_set_param command $PROG  
+	procd_set_param respawn  
+	procd_close_instance 
+	}
+
+###支持内存卡   
+1. 找到文件： sd.c文件中查找sd.c文件中的 .data_pins= 4,  改为： .data_pins= 1,  
+
+    cd build_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/linux-ramips_mt7620/linux-3.18.45/drivers/mmc/host/mtk-mmc/   
+2. target/linux/ramips/dts/HIWOOYA7620.dts文件中增加   
+```  
+	sdhci@10130000 {  
+	compatible = "ralink,mt7620-sdhci";  
+	reg = <0x10130000 4000>;  
+	interrupt-parent = <&intc>;  
+	interrupts = <14>;  
+	status = "okay";  
+	};   
+```   
+3. make menuconfig->kernel modules->other modules->kmod-sdhci-mt7620    
+4. make menuconfig->kernel modules->native language support->cp437 iso8859-1 utf8  
+5. make menuconfig->kernel modules->filesystem->kmod-fs-vfat  ext4 ntfs
+6. Kernel modules —> Block Devices —> <*>kmod-scsi-core  
+7. Base system —> <*>block-mount 
+8. Utilities —> Filesystem —> <*> badblocks    
+挂载NTFS只读的问题：  
+http://www.360doc.com/content/13/0607/07/2311914_291169909.shtml
+###支持U盘   
+make menuconfig->kernel modules->usb support->kmod-usb-storage-extras
 
 
 
